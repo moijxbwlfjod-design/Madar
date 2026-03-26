@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['first_name', 'last_name', 'username', 'cin', 'date_of_birth', 'email', 'password', 'is_admin'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements JWTSubject
 {
@@ -30,6 +30,7 @@ class User extends Authenticatable implements JWTSubject
             'password' => 'hashed',
         ];
     }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -44,4 +45,34 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function accounts()
+    {
+        return $this->belongsToMany('account_id', Account::class)->withPivot('role_id', 'accept_closure')->withTimestamps();
+    }
+
+    public function roles(){
+        return $this->belongsToMany('account_users', Role::class)->withPivot('account_id', 'accept_closure')->withTimestamps();
+    }
+
+    public function transfers(){
+        return $this->hasMany(Transfer::class);
+    }
+
+    public function blocked_accounts(){
+        return $this->hasMany(BlockedAccount::class);
+    }
+
+    public function diposits(){
+        return $this->hasMany(Diposit::class);
+    }
+
+    public function withdrawals(){
+        return $this->hasMany(Withdrawal::class);
+    }
+
+    public function invitations(){
+        return $this->hasMany(Invitation::class, 'sender_id');
+    }
+
 }
