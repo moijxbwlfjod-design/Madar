@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class,'sender_id');
             $table->foreignIdFor(Account::class);
-            $table->string('email');
+            $table->string('receiver_email');
             $table->string('token');
             $table->timestamps();
         });
