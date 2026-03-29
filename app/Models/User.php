@@ -27,7 +27,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
             'email_verified_at' => 'datetime',
+            'date_of_birth' => 'date',
             'password' => 'hashed',
+            'is_admin' => 'bool',
         ];
     }
 
@@ -48,7 +50,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function accounts()
     {
-        return $this->belongsToMany('account_id', Account::class)->withPivot('role_id', 'accept_closure')->withTimestamps();
+        return $this->belongsToMany('account_users', Account::class)->withPivot('role_id', 'accept_closure')->withTimestamps();
     }
 
     public function roles(){

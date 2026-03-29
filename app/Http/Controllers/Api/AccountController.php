@@ -3,37 +3,30 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\StoreAccountRequest;
 
-class AuthController extends Controller
+class AccountController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $usre = User::all();
-        return response()->json(['data'=>$usre,'success'=>true],200);
+        return response()->json([
+            'message' => 'user accounts',
+            'accounts' => Auth::user()->accounts
+        ], 200);
     }
 
-    public function register(RegisterRequest $request){
-        $data = $request->validated();
-        $user = User::create($data);
-        $token = Auth::login($user);
-        return response()->json([
-            'message' => 'user created',
-            'token' => $token
-        ], 201);
-    }
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAccountRequest $request)
     {
-        //
+        Account::create()
     }
 
     /**
